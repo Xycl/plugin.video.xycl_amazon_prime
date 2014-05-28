@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.amazon_prime_de" name="Amazon.de Prime Instant Video" version="13.0.0" provider-name="xycl">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="plugin.program.chrome.launcher" version="1.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>en de</language>
+        <summary lang="de">Amazon Instant Prime</summary>
+        <summary lang="en">Amazon Instant Prime</summary>
+        <description lang="de">Spielt die Filme von Amazon Instant Prime. Sie benötigen eine Amazon Prime Mitgliedschaft!</description>
+        <description lang="en">Plays movies from Amazon Instant Prime. You need an Amazon Prime membership!</description>
+    </extension>
+</addon>
