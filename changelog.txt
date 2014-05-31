@@ -1,2 +1,9 @@
+2014/05/31 --> v 13.0.2
+New:    Show tv series
+New:    Search menu
+
+2014/05/30 --> v 13.0.1
+Update: Force thumbnail view
+
 2014/05/26 --> v 13.0.0
 New:    Initial version
