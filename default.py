@@ -122,7 +122,7 @@ def show_series(page):
     response.close()
     
     # find movies
-    match=re.compile('<img onload=.*?src="(.*?)" class="productImage ilc2" />.*?</div></a><h3 class="newaps">.*?<a href="(.*?)"><span class="lrg bold">(.*?)</span></a>', re.DOTALL).findall(link)
+    match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
     # add movies to list
     for img,url,name in match:
@@ -211,7 +211,7 @@ def show_movies(page):
     response.close()
     
     # find movies
-    match=re.compile('<img onload=.*?src="(.*?)" class="productImage ilc2" />.*?</div></a><h3 class="newaps">.*?<a href="(.*?)"><span class="lrg bold">(.*?)</span></a>', re.DOTALL).findall(link)
+    match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
     # add movies to list
     for img,url,name in match:

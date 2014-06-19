@@ -1,3 +1,6 @@
+2014/05/31 --> v 13.0.4
+Update: Broken regexp due to changes in HTML layout fixed.
+
 2014/05/31 --> v 13.0.2
 New:    Show tv series
 New:    Search menu
