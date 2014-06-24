@@ -1,4 +1,7 @@
-2014/05/31 --> v 13.0.4
+2014/06/24 --> v 13.0.4
+Fix:    Spelling corrected
+
+2014/05/31 --> v 13.0.3
 Update: Broken regexp due to changes in HTML layout fixed.
 
 2014/05/31 --> v 13.0.2
