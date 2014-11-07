@@ -126,7 +126,8 @@ def show_series(page):
 
     # add movies to list
     for img,url,name in match:
-        add_dir(name, url, EPISODES, img)
+        #add_dir(name, url, EPISODES, img)
+        add_dir(name, url, VIDEOS, img)
             
     # find link to next page
     match=re.compile('<a title="Nächste Seite".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
