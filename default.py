@@ -111,6 +111,14 @@ def show_search():
         for img,url,name in match:
             add_dir(name, url, VIDEOS, img)
 
+        match=re.compile('<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)".*?<img alt=".*?" src="([^"]*?)"', re.DOTALL).findall(link)
+
+        # add movies to list
+        for name,url,img in match:
+            add_dir(name, url, VIDEOS, img)            
+
+            
+ 
 
 def show_series(page):
 
@@ -127,6 +135,13 @@ def show_series(page):
     # add movies to list
     for img,url,name in match:
         add_dir(name, url, EPISODES, img)
+            
+    match=re.compile('<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)".*?<img alt=".*?" src="([^"]*?)"', re.DOTALL).findall(link)
+
+    # add movies to list
+    for name,url,img in match:
+        add_dir(name, url, VIDEOS, img)            
+
             
     # find link to next page
     match=re.compile('<a title="Nächste Seite".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
@@ -216,6 +231,13 @@ def show_movies(page):
     # add movies to list
     for img,url,name in match:
         add_dir(name, url, VIDEOS, img)
+
+    match=re.compile('<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)".*?<img alt=".*?" src="([^"]*?)"', re.DOTALL).findall(link)
+
+    # add movies to list
+    for name,url,img in match:
+        add_dir(name, url, VIDEOS, img)            
+
             
     # find link to next page
     match=re.compile('<a title="Nächste Seite".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
