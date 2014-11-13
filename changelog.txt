@@ -1,3 +1,6 @@
+2014/11/13 --> v 13.0.6
+Fix:    Regular expression added
+
 2014/11/07 --> v 13.0.5
 Fix:    Series corrected
 

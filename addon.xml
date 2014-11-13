@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.amazon_prime_de" name="Amazon.de Prime Instant Video" version="13.0.5" provider-name="xycl">
+<addon id="plugin.video.amazon_prime_de" name="Amazon.de Prime Instant Video" version="13.0.6" provider-name="xycl">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.program.chrome.launcher" version="1.0.0"/>
