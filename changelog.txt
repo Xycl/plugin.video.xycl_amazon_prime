@@ -1,3 +1,6 @@
+2014/11/07 --> v 13.0.5
+Fix:    Series corrected
+
 2014/06/24 --> v 13.0.4
 Fix:    Spelling corrected
 
