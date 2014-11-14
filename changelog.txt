@@ -1,3 +1,6 @@
+2014/11/14 --> v 13.0.7
+Fix:    Regular expression for pictures corrected
+
 2014/11/13 --> v 13.0.6
 Fix:    Regular expression added
 

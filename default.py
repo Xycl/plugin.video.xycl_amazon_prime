@@ -111,10 +111,10 @@ def show_search():
         for img,url,name in match:
             add_dir(name, url, VIDEOS, img)
 
-        match=re.compile('<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)".*?<img alt=".*?" src="([^"]*?)"', re.DOTALL).findall(link)
+        match=re.compile('<img alt="Produkt-Information" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
 
         # add movies to list
-        for name,url,img in match:
+        for img, name,url in match:
             add_dir(name, url, VIDEOS, img)            
 
             
@@ -137,10 +137,10 @@ def show_series(page):
         #add_dir(name, url, EPISODES, img)
         add_dir(name, url, VIDEOS, img)
             
-    match=re.compile('<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)".*?<img alt=".*?" src="([^"]*?)"', re.DOTALL).findall(link)
+    match=re.compile('<img alt="Produkt-Information" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
 
     # add movies to list
-    for name,url,img in match:
+    for img, name,url in match:
         add_dir(name, url, VIDEOS, img)            
 
             
@@ -233,10 +233,10 @@ def show_movies(page):
     for img,url,name in match:
         add_dir(name, url, VIDEOS, img)
 
-    match=re.compile('<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)".*?<img alt=".*?" src="([^"]*?)"', re.DOTALL).findall(link)
+    match=re.compile('<img alt="Produkt-Information" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
 
     # add movies to list
-    for name,url,img in match:
+    for img, name,url in match:
         add_dir(name, url, VIDEOS, img)            
 
             
