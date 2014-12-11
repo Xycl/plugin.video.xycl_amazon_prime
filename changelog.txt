@@ -1,3 +1,6 @@
+2014/12/11 --> v 13.0.8
+Fix:    Added browsing by genre 
+
 2014/11/14 --> v 13.0.7
 Fix:    Regular expression for pictures corrected
 

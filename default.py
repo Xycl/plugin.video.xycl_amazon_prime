@@ -33,7 +33,14 @@ EPISODES = 3
 RESULT_SET_MENU = 4
 VIDEOS = 5
 SEARCH = 6
+MOVIE_GENRES = 7
+TV_SERIES_GENRES = 8
 
+tv_series_genres_url = 'http://www.amazon.de/Prime-TV-Genres/b/ref=atv_sn_piv_cl2_tv_gn?_encoding=UTF8&node=3794658031'
+movie_genres_url = 'http://www.amazon.de/b/ref=atv_sn_piv_cl1_mv_gn?_encoding=UTF8&node=3794661031'
+series_url = 'http://www.amazon.de/s/ref=sr_ex_p_n_date_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3015916031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401514116'
+movies_url = 'http://www.amazon.de/s/ref=sr_nr_n_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401261746&rnid=3279204031'
+search_url = 'http://www.amazon.de/s/ref=nb_sb_noss?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=node%3D3279204031&field-keywords=aaaaaaaa&rh=n%3A3279204031%2Ck%3Aaaaaaaaa'
 
 def smart_unicode(s):
     """credit : sfaxman"""
@@ -62,6 +69,16 @@ def smart_utf8(s):
     return smart_unicode(s).encode('utf-8')
 
 
+def show_1st_menu():
+    add_dir('Filme nach Genre', movie_genres_url, MOVIE_GENRES, '')      
+    add_dir('Meistgesehene Filme', movies_url, MOVIES, '')          
+    
+    add_dir('Serien nach Genre', series_url, TV_SERIES_GENRES, '')      
+    add_dir('Meistgesehene Serien', series_url , SERIES, '')
+      
+    add_dir('Suche', '', SEARCH, '')     
+
+    
 def add_dir(name, url, mode, iconimage):
     try:
         display_name = HTMLParser().unescape(smart_unicode(name))
@@ -81,23 +98,12 @@ def add_dir(name, url, mode, iconimage):
     return ok
 
 
-def show_1st_menu():
-    
-    series = 'http://www.amazon.de/s/ref=sr_ex_p_n_date_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3015916031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401514116'
-    movies = 'http://www.amazon.de/s/ref=sr_nr_n_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401261746&rnid=3279204031'
-    add_dir('Serien', series , SERIES, '')
-    add_dir('Filme', movies, MOVIES, '')            
-    add_dir('Suche', '', SEARCH, '')     
-
-
 def show_search():
-    search = 'http://www.amazon.de/s/ref=nb_sb_noss?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=node%3D3279204031&field-keywords=aaaaaaaa&rh=n%3A3279204031%2Ck%3Aaaaaaaaa'
-    
     dialog = xbmcgui.Dialog()
     input = dialog.input('Zu suchenden Film eingeben', '', xbmcgui.INPUT_ALPHANUM)
     if len(input) > 0:
-        search = search.replace('aaaaaaaa', urllib.quote_plus(input))
-        req = urllib2.Request(search)
+        search_url = search_url.replace('aaaaaaaa', urllib.quote_plus(input))
+        req = urllib2.Request(search_url)
             
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
@@ -116,9 +122,7 @@ def show_search():
         # add movies to list
         for img, name,url in match:
             add_dir(name, url, VIDEOS, img)            
-
             
- 
 
 def show_series(page):
 
@@ -212,6 +216,47 @@ def show_episodes(page):
             'skin.xeebo': 55
     }
  
+    skin_dir = xbmc.getSkinDir()    
+    if skin_dir in view_modes:
+        xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
+
+
+def show_genres(mode):
+    if mode == MOVIE_GENRES:
+        req = urllib2.Request(movie_genres_url)
+    else:
+        req = urllib2.Request(tv_series_genres_url)
+        
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    
+    # find movies
+    match=re.compile('<li class="collections-element">.*?<a class=\'titlelink\' href="(.*?)">.*?<img alt="(.*?)" src="(.*?)" class="collections-image" />.*?</li>', re.DOTALL).findall(link)
+
+    # add genres to list
+    for url, name, img in match:
+        if mode == MOVIE_GENRES:
+            add_dir(name, url, MOVIES, img)            
+        else:
+            add_dir(name, url, SERIES, img)            
+
+
+    view_modes = {
+            'skin.confluence': 500,
+            'skin.aeon.nox': 551,
+            'skin.confluence-vertical': 500,
+            'skin.jx720': 52,
+            'skin.pm3-hd': 53,
+            'skin.rapier': 50,
+            'skin.simplicity': 500,
+            'skin.slik': 53,
+            'skin.touched': 500,
+            'skin.transparency': 53,
+            'skin.xeebo': 55
+    }
+
     skin_dir = xbmc.getSkinDir()    
     if skin_dir in view_modes:
         xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
@@ -317,6 +362,9 @@ if mode == EPISODES:
     show_episodes(url)
 if mode == SEARCH:
     show_search()
+if mode == MOVIE_GENRES or mode == TV_SERIES_GENRES:
+    show_genres(mode)
+        
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
