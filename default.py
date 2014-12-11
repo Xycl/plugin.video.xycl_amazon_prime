@@ -70,6 +70,9 @@ def smart_utf8(s):
 
 
 def show_1st_menu():
+    global movie_genres_url, movies_url, series_url, series_url
+    global MOVIE_GENRES, MOVIES, TV_SERIES_GENRES, SERIES, SEARCH
+    
     add_dir('Filme nach Genre', movie_genres_url, MOVIE_GENRES, '')      
     add_dir('Meistgesehene Filme', movies_url, MOVIES, '')          
     
@@ -99,6 +102,8 @@ def add_dir(name, url, mode, iconimage):
 
 
 def show_search():
+    global search_url, VIDEOS
+    
     dialog = xbmcgui.Dialog()
     input = dialog.input('Zu suchenden Film eingeben', '', xbmcgui.INPUT_ALPHANUM)
     if len(input) > 0:
@@ -125,7 +130,8 @@ def show_search():
             
 
 def show_series(page):
-
+    global VIDEOS, MOVIES
+    
     req = urllib2.Request(page)
         
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -180,6 +186,8 @@ def show_series(page):
 
 
 def show_episodes(page):
+    global VIDEOS
+    
     req = urllib2.Request(page)
         
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -222,6 +230,8 @@ def show_episodes(page):
 
 
 def show_genres(mode):
+    global MOVIE_GENRES, MOVIES, SERIES, movie_genres_url, tv_series_genres_url
+    
     if mode == MOVIE_GENRES:
         req = urllib2.Request(movie_genres_url)
     else:
@@ -263,7 +273,8 @@ def show_genres(mode):
 
 
 def show_movies(page):
- 
+    global VIDEOS
+    
     req = urllib2.Request(page)
         
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
