@@ -25,8 +25,11 @@ import urllib, urllib2, re, sys
 from HTMLParser import HTMLParser
 
 # xbmc imports
-import xbmcplugin, xbmcgui, xbmc
+import xbmcplugin, xbmcgui, xbmc, xbmcaddon
+__settings__ = xbmcaddon.Addon("plugin.video.amazon_prime")
+__language__ = __settings__.getLocalizedString
 
+        
 MOVIES = 1
 SERIES = 2
 EPISODES = 3
@@ -35,12 +38,20 @@ VIDEOS = 5
 SEARCH = 6
 MOVIE_GENRES = 7
 TV_SERIES_GENRES = 8
-
 tv_series_genres_url = 'http://www.amazon.de/Prime-TV-Genres/b/ref=atv_sn_piv_cl2_tv_gn?_encoding=UTF8&node=3794658031'
 movie_genres_url = 'http://www.amazon.de/b/ref=atv_sn_piv_cl1_mv_gn?_encoding=UTF8&node=3794661031'
 series_url = 'http://www.amazon.de/s/ref=sr_ex_p_n_date_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3015916031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401514116'
 movies_url = 'http://www.amazon.de/s/ref=sr_nr_n_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401261746&rnid=3279204031'
-search_url = 'http://www.amazon.de/s/ref=nb_sb_noss?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=node%3D3279204031&field-keywords=aaaaaaaa&rh=n%3A3279204031%2Ck%3Aaaaaaaaa'
+search_url = 'http://www.amazon.de/s/ref=nb_sb_noss?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=node%3D3279204031&field-keywords=aaaaaaaa&rh=n%3A3279204031%2Ck%3Aaaaaaaaa'    
+        
+def set_service():
+    global movie_genres_url, movies_url, tv_series_genres_url, series_url
+    if getaddon_setting('Service') == "1":
+        tv_series_genres_url = 'http://www.amazon.co.uk/Shop-TV-Genres/b/ref=atv_sn_siv_cl2_tv_gn?_encoding=UTF8&node=3788194031'
+        movie_genres_url = 'http://www.amazon.co.uk/Prime-Movie-Genres/b/ref=atv_sn_piv_cl1_mv_gn?_encoding=UTF8&node=3788183031'
+        series_url = 'http://www.amazon.co.uk/s/ref=atv_sn_piv_cl2_tv_pl?_encoding=UTF8&rh=n%3A3010085031%2Cn%3A3356011031&sort=popularity-rank'
+        movies_url = 'http://www.amazon.co.uk/s/ref=atv_sn_piv_cl1_mv_pl?_encoding=UTF8&rh=n%3A3010085031%2Cn%3A3356010031&sort=popularity-rank'
+        search_url = 'http://www.amazon.co.uk/s/ref=nb_sb_noss?url=node%3D3356010031&field-keywords=aaaaaaaa&rh=n%3A3356010031%2Ck%3Aaaaaaaaa'
 
 def smart_unicode(s):
     """credit : sfaxman"""
@@ -68,18 +79,44 @@ def smart_unicode(s):
 def smart_utf8(s):
     return smart_unicode(s).encode('utf-8')
 
+    
+def getstring(num):
+    return __language__(num)
+
+def getaddon_setting(name):
+    return __settings__.getSetting(name)
+    
+def change_view():
+    view_modes = {
+            'skin.confluence': 500,
+            'skin.aeon.nox': 551,
+            'skin.confluence-vertical': 500,
+            'skin.jx720': 52,
+            'skin.pm3-hd': 53,
+            'skin.rapier': 50,
+            'skin.simplicity': 500,
+            'skin.slik': 53,
+            'skin.touched': 500,
+            'skin.transparency': 53,
+            'skin.xeebo': 55
+    }
+
+    skin_dir = xbmc.getSkinDir()    
+    if skin_dir in view_modes:
+        xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
+
 
 def show_1st_menu():
-    global movie_genres_url, movies_url, series_url, series_url
+    global movie_genres_url, movies_url, tv_series_genres_url, series_url
     global MOVIE_GENRES, MOVIES, TV_SERIES_GENRES, SERIES, SEARCH
     
-    add_dir('Filme nach Genre', movie_genres_url, MOVIE_GENRES, '')      
-    add_dir('Meistgesehene Filme', movies_url, MOVIES, '')          
+    add_dir(getstring(30001), movie_genres_url, MOVIE_GENRES, '')      
+    add_dir(getstring(30002), movies_url, MOVIES, '')          
     
-    add_dir('Serien nach Genre', series_url, TV_SERIES_GENRES, '')      
-    add_dir('Meistgesehene Serien', series_url , SERIES, '')
+    add_dir(getstring(30003), tv_series_genres_url, TV_SERIES_GENRES, '')      
+    add_dir(getstring(30004), series_url , SERIES, '')
       
-    add_dir('Suche', '', SEARCH, '')     
+    add_dir(getstring(30005), '', SEARCH, '')     
 
     
 def add_dir(name, url, mode, iconimage):
@@ -105,7 +142,7 @@ def show_search():
     global search_url, VIDEOS
     
     dialog = xbmcgui.Dialog()
-    input = dialog.input('Zu suchenden Film eingeben', '', xbmcgui.INPUT_ALPHANUM)
+    input = dialog.input(getstring(30006), '', xbmcgui.INPUT_ALPHANUM)
     if len(input) > 0:
         search_url = search_url.replace('aaaaaaaa', urllib.quote_plus(input))
         req = urllib2.Request(search_url)
@@ -114,18 +151,18 @@ def show_search():
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        
+        """
         # find movies
         match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<h3 class="newaps">.*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
         # add movies to list
         for img,url,name in match:
             add_dir(name, url, VIDEOS, img)
-
-        match=re.compile('<img alt="Produkt-Information" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
+        """
+        match=re.compile('<img alt="Produ.t(-Information| Details)" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
 
         # add movies to list
-        for img, name,url in match:
+        for __, img, name,url in match:
             add_dir(name, url, VIDEOS, img)            
             
 
@@ -138,7 +175,7 @@ def show_series(page):
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-    
+    """
     # find movies
     match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
@@ -146,11 +183,11 @@ def show_series(page):
     for img,url,name in match:
         #add_dir(name, url, EPISODES, img)
         add_dir(name, url, VIDEOS, img)
-            
-    match=re.compile('<img alt="Produkt-Information" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
+    """     
+    match=re.compile('<img alt="Produ.t(-Information| Details)" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
 
     # add movies to list
-    for img, name,url in match:
+    for __, img, name,url in match:
         add_dir(name, url, VIDEOS, img)            
 
             
@@ -166,23 +203,7 @@ def show_series(page):
     
     #xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     
-    view_modes = {
-            'skin.confluence': 500,
-            'skin.aeon.nox': 551,
-            'skin.confluence-vertical': 500,
-            'skin.jx720': 52,
-            'skin.pm3-hd': 53,
-            'skin.rapier': 50,
-            'skin.simplicity': 500,
-            'skin.slik': 53,
-            'skin.touched': 500,
-            'skin.transparency': 53,
-            'skin.xeebo': 55
-    }
- 
-    skin_dir = xbmc.getSkinDir()    
-    if skin_dir in view_modes:
-        xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
+    change_view()
 
 
 def show_episodes(page):
@@ -194,13 +215,13 @@ def show_episodes(page):
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-    
+    """
     #find picture
     match = re.compile('<div class="dp-meta-icon-container">.*?<img.*?src="(.*?)"', re.DOTALL).findall(link)
     for url in match:
         img = url
         break    
-    
+    """
     # find episodes
     match=re.compile('<div class="dv-extender" data-extender=".*?<p>.*?<a href="(.*?)".*?>(.*?)</a>(.*?)</p>', re.DOTALL).findall(link)
 
@@ -210,23 +231,7 @@ def show_episodes(page):
             
     #xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     
-    view_modes = {
-            'skin.confluence': 500,
-            'skin.aeon.nox': 551,
-            'skin.confluence-vertical': 500,
-            'skin.jx720': 52,
-            'skin.pm3-hd': 53,
-            'skin.rapier': 50,
-            'skin.simplicity': 500,
-            'skin.slik': 53,
-            'skin.touched': 500,
-            'skin.transparency': 53,
-            'skin.xeebo': 55
-    }
- 
-    skin_dir = xbmc.getSkinDir()    
-    if skin_dir in view_modes:
-        xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
+    change_view()
 
 
 def show_genres(mode):
@@ -248,28 +253,15 @@ def show_genres(mode):
     # add genres to list
     for url, name, img in match:
         if mode == MOVIE_GENRES:
-            add_dir(name, url, MOVIES, img)            
+            url = "http://www.amazon.co.uk" + url 
+            add_dir(name, url, MOVIES, img)   
+            print "show_genres"
+            print url
         else:
             add_dir(name, url, SERIES, img)            
 
+    change_view()
 
-    view_modes = {
-            'skin.confluence': 500,
-            'skin.aeon.nox': 551,
-            'skin.confluence-vertical': 500,
-            'skin.jx720': 52,
-            'skin.pm3-hd': 53,
-            'skin.rapier': 50,
-            'skin.simplicity': 500,
-            'skin.slik': 53,
-            'skin.touched': 500,
-            'skin.transparency': 53,
-            'skin.xeebo': 55
-    }
-
-    skin_dir = xbmc.getSkinDir()    
-    if skin_dir in view_modes:
-        xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
 
 
 def show_movies(page):
@@ -281,18 +273,18 @@ def show_movies(page):
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-    
+    """
     # find movies
     match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
     # add movies to list
     for img,url,name in match:
         add_dir(name, url, VIDEOS, img)
-
-    match=re.compile('<img alt="Produkt-Information" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
+    """
+    match=re.compile('<img alt="Produ.t(-Information| Details)" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
 
     # add movies to list
-    for img, name,url in match:
+    for __,img, name,url in match:
         add_dir(name, url, VIDEOS, img)            
 
             
@@ -308,23 +300,7 @@ def show_movies(page):
     
     #xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     
-    view_modes = {
-            'skin.confluence': 500,
-            'skin.aeon.nox': 551,
-            'skin.confluence-vertical': 500,
-            'skin.jx720': 52,
-            'skin.pm3-hd': 53,
-            'skin.rapier': 50,
-            'skin.simplicity': 500,
-            'skin.slik': 53,
-            'skin.touched': 500,
-            'skin.transparency': 53,
-            'skin.xeebo': 55
-    }
- 
-    skin_dir = xbmc.getSkinDir()    
-    if skin_dir in view_modes:
-        xbmc.executebuiltin('Container.SetViewMode('+ str(view_modes[skin_dir]) +')')
+    change_view()
 
 
 def get_params():
@@ -362,6 +338,7 @@ try:
 except:
     pass
 
+set_service()
 
 if mode==None:
     show_1st_menu()
