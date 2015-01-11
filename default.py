@@ -26,7 +26,7 @@ from HTMLParser import HTMLParser
 
 # xbmc imports
 import xbmcplugin, xbmcgui, xbmc, xbmcaddon
-__settings__ = xbmcaddon.Addon("plugin.video.amazon_prime")
+__settings__ = xbmcaddon.Addon("plugin.video.xycl_amazon_prime")
 __language__ = __settings__.getLocalizedString
 
         
