@@ -192,13 +192,16 @@ def show_series(page):
 
             
     # find link to next page
-    match=re.compile('<a title="Nächste Seite".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
-    for url in match:
+    match=re.compile('<a title="(Nächste Seite|Next Page)".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
+    for __, url in match:
         try:
             url = HTMLParser().unescape(smart_unicode(url))
         except:
             pass
-        add_dir('>> Nächste Seite', 'http://www.amazon.de' + url , MOVIES, '')
+        if getaddon_setting('Service') == "1":
+            add_dir('>> Next Page', 'http://www.amazon.co.uk' + url , SERIES, '')
+        else:
+            add_dir('>> Nächste Seite', 'http://www.amazon.de' + url , SERIES, '')
         break
     
     #xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
@@ -253,10 +256,9 @@ def show_genres(mode):
     # add genres to list
     for url, name, img in match:
         if mode == MOVIE_GENRES:
-            url = "http://www.amazon.co.uk" + url 
+            if getaddon_setting('Service') == "1":
+                url = "http://www.amazon.co.uk" + url 
             add_dir(name, url, MOVIES, img)   
-            print "show_genres"
-            print url
         else:
             add_dir(name, url, SERIES, img)            
 
@@ -289,13 +291,16 @@ def show_movies(page):
 
             
     # find link to next page
-    match=re.compile('<a title="Nächste Seite".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
-    for url in match:
+    match=re.compile('<a title="(Nächste Seite|Next Page)".*?id="pagnNextLink".*?class="pagnNext".*?href="(.*?)">', re.DOTALL).findall(link)
+    for __, url in match:
         try:
             url = HTMLParser().unescape(smart_unicode(url))
         except:
             pass
-        add_dir('>> Nächste Seite', 'http://www.amazon.de' + url , MOVIES, '')
+        if getaddon_setting('Service') == "1":
+            add_dir('>> Next Page', 'http://www.amazon.co.uk' + url , MOVIES, '')
+        else:
+            add_dir('>> Nächste Seite', 'http://www.amazon.de' + url , MOVIES, '')
         break
     
     #xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
@@ -338,6 +343,7 @@ try:
 except:
     pass
 
+#print "Service: " +  getaddon_setting('Service')
 set_service()
 
 if mode==None:
