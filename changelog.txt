@@ -1,6 +1,8 @@
+2015/04/20 --> v 14.1.0
+Fix:    Plugin wasn't working anymore. DE and UK Amazon links now corrected.
+
 2014/01/12 --> v 14.0.2
 Fix:    German movie genres didn't work
-
 
 2014/01/11 --> v 14.0.0
 Added:  Added Amazon UK

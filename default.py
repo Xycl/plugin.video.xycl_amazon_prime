@@ -43,9 +43,10 @@ movie_genres_url = 'http://www.amazon.de/b/ref=atv_sn_piv_cl1_mv_gn?_encoding=UT
 series_url = 'http://www.amazon.de/s/ref=sr_ex_p_n_date_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3015916031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401514116'
 movies_url = 'http://www.amazon.de/s/ref=sr_nr_n_0?rh=n%3A3279204031%2Cn%3A!3010076031%2Cn%3A3356018031&bbn=3279204031&sort=popularity-rank&ie=UTF8&qid=1401261746&rnid=3279204031'
 search_url = 'http://www.amazon.de/s/ref=nb_sb_noss?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&url=node%3D3279204031&field-keywords=aaaaaaaa&rh=n%3A3279204031%2Ck%3Aaaaaaaaa'    
-        
+search_url = 'http://www.amazon.de/s/ref=sr_il_ti_prime-instant-video?rh=n%3A3279204031%2Ck%3Aaaaaaaaa&keywords=aaaaaaaa&ie=UTF8&qid=1429511910&lo=prime-instant-video'
+
 def set_service():
-    global movie_genres_url, movies_url, tv_series_genres_url, series_url
+    global movie_genres_url, movies_url, tv_series_genres_url, series_url, search_url
     if getaddon_setting('Service') == "1":
         tv_series_genres_url = 'http://www.amazon.co.uk/Shop-TV-Genres/b/ref=atv_sn_siv_cl2_tv_gn?_encoding=UTF8&node=3788194031'
         movie_genres_url = 'http://www.amazon.co.uk/Prime-Movie-Genres/b/ref=atv_sn_piv_cl1_mv_gn?_encoding=UTF8&node=3788183031'
@@ -145,24 +146,17 @@ def show_search():
     input = dialog.input(getstring(30006), '', xbmcgui.INPUT_ALPHANUM)
     if len(input) > 0:
         search_url = search_url.replace('aaaaaaaa', urllib.quote_plus(input))
+
         req = urllib2.Request(search_url)
             
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        """
-        # find movies
-        match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<h3 class="newaps">.*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
+        match=re.compile('<li id="result_[^"]*?".*?<img alt="(Produkt-Information|Product Details)" src="([^"]*?)".*?<a class="[^"]*?s-access-detail-page[^"]*?" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
         # add movies to list
-        for img,url,name in match:
-            add_dir(name, url, VIDEOS, img)
-        """
-        match=re.compile('<img alt="Produ.t(-Information| Details)" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
-
-        # add movies to list
-        for __, img, name,url in match:
+        for _, img, name,url in match:
             add_dir(name, url, VIDEOS, img)            
             
 
@@ -175,19 +169,10 @@ def show_series(page):
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-    """
-    # find movies
-    match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
+    match=re.compile('<li id="result_[^"]*?".*?<img alt="(Produkt-Information|Product Details)" src="([^"]*?)".*?<a class="[^"]*?s-access-detail-page[^"]*?" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
     # add movies to list
-    for img,url,name in match:
-        #add_dir(name, url, EPISODES, img)
-        add_dir(name, url, VIDEOS, img)
-    """     
-    match=re.compile('<img alt="Produ.t(-Information| Details)" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
-
-    # add movies to list
-    for __, img, name,url in match:
+    for _, img, name,url in match:
         add_dir(name, url, VIDEOS, img)            
 
             
@@ -218,13 +203,7 @@ def show_episodes(page):
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-    """
-    #find picture
-    match = re.compile('<div class="dp-meta-icon-container">.*?<img.*?src="(.*?)"', re.DOTALL).findall(link)
-    for url in match:
-        img = url
-        break    
-    """
+
     # find episodes
     match=re.compile('<div class="dv-extender" data-extender=".*?<p>.*?<a href="(.*?)".*?>(.*?)</a>(.*?)</p>', re.DOTALL).findall(link)
 
@@ -275,18 +254,10 @@ def show_movies(page):
     response = urllib2.urlopen(req)
     link=response.read()
     response.close()
-    """
-    # find movies
-    match=re.compile('<img onload="viewCompleteImageLoaded.*?src="(.*?)".*?<a href="(.*?)"><span.*?>(.*?)</span></a>', re.DOTALL).findall(link)
 
+    match=re.compile('<li id="result_[^"]*?".*?<img alt="(Produkt-Information|Product Details)" src="([^"]*?)".*?<a class="[^"]*?s-access-detail-page[^"]*?" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
     # add movies to list
-    for img,url,name in match:
-        add_dir(name, url, VIDEOS, img)
-    """
-    match=re.compile('<img alt="Produ.t(-Information| Details)" src="([^"]*?)" onload.*?<a class="a-link-normal s-access-detail-page a-text-normal" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
-
-    # add movies to list
-    for __,img, name,url in match:
+    for _, img, name,url in match:
         add_dir(name, url, VIDEOS, img)            
 
             
@@ -343,7 +314,6 @@ try:
 except:
     pass
 
-#print "Service: " +  getaddon_setting('Service')
 set_service()
 
 if mode==None:
