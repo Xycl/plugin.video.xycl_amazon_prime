@@ -230,7 +230,7 @@ def show_genres(mode):
     response.close()
     
     # find movies
-    match=re.compile('<li class="collections-element">.*?<a class=\'titlelink\' href="(.*?)">.*?<img alt="(.*?)" src="(.*?)" class="collections-image" />.*?</li>', re.DOTALL).findall(link)
+    match=re.compile('<li class="collections-element">.*?<a class=\'titlelink\' href="(.*?)">.*?<img.*?alt="(.*?)" src="(.*?)".*?class="collections-image" />.*?</li>', re.DOTALL).findall(link)
 
     # add genres to list
     for url, name, img in match:

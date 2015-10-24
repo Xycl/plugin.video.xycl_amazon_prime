@@ -1,3 +1,6 @@
+2015/10/24 --> v 15.0.0
+Fix:    Plugin wasn't working anymore. DE now corrected.
+
 2015/04/20 --> v 14.1.0
 Fix:    Plugin wasn't working anymore. DE and UK Amazon links now corrected.
 
