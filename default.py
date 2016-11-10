@@ -46,10 +46,8 @@ search_url = 'http://www.amazon.de/s/ref=nb_sb_noss?__mk_de_DE=%C3%85M%C3%85%C5%
 search_url = 'http://www.amazon.de/s/ref=sr_il_ti_prime-instant-video?rh=n%3A3279204031%2Ck%3Aaaaaaaaa&keywords=aaaaaaaa&ie=UTF8&qid=1429511910&lo=prime-instant-video'
 
 def set_service():
-    global movie_genres_url, movies_url, tv_series_genres_url, series_url, search_url
+    global movies_url, series_url, search_url
     if getaddon_setting('Service') == "1":
-        tv_series_genres_url = 'http://www.amazon.co.uk/Shop-TV-Genres/b/ref=atv_sn_siv_cl2_tv_gn?_encoding=UTF8&node=3788194031'
-        movie_genres_url = 'http://www.amazon.co.uk/Prime-Movie-Genres/b/ref=atv_sn_piv_cl1_mv_gn?_encoding=UTF8&node=3788183031'
         series_url = 'http://www.amazon.co.uk/s/ref=atv_sn_piv_cl2_tv_pl?_encoding=UTF8&rh=n%3A3010085031%2Cn%3A3356011031&sort=popularity-rank'
         movies_url = 'http://www.amazon.co.uk/s/ref=atv_sn_piv_cl1_mv_pl?_encoding=UTF8&rh=n%3A3010085031%2Cn%3A3356010031&sort=popularity-rank'
         search_url = 'http://www.amazon.co.uk/s/ref=nb_sb_noss?url=node%3D3356010031&field-keywords=aaaaaaaa&rh=n%3A3356010031%2Ck%3Aaaaaaaaa'
@@ -108,15 +106,11 @@ def change_view():
 
 
 def show_1st_menu():
-    global movie_genres_url, movies_url, tv_series_genres_url, series_url
+    global movies_url, series_url
     global MOVIE_GENRES, MOVIES, TV_SERIES_GENRES, SERIES, SEARCH
     
-    add_dir(getstring(30001), movie_genres_url, MOVIE_GENRES, '')      
     add_dir(getstring(30002), movies_url, MOVIES, '')          
-    
-    add_dir(getstring(30003), tv_series_genres_url, TV_SERIES_GENRES, '')      
     add_dir(getstring(30004), series_url , SERIES, '')
-      
     add_dir(getstring(30005), '', SEARCH, '')     
 
     
@@ -215,36 +209,6 @@ def show_episodes(page):
     
     change_view()
 
-
-def show_genres(mode):
-    global MOVIE_GENRES, MOVIES, SERIES, movie_genres_url, tv_series_genres_url
-    
-    if mode == MOVIE_GENRES:
-        req = urllib2.Request(movie_genres_url)
-    else:
-        req = urllib2.Request(tv_series_genres_url)
-        
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-    response = urllib2.urlopen(req)
-    link=response.read()
-    response.close()
-    
-    # find movies
-    match=re.compile('<li class="collections-element">.*?<a class=\'titlelink\' href="(.*?)">.*?<img.*?alt="(.*?)" src="(.*?)".*?class="collections-image" />.*?</li>', re.DOTALL).findall(link)
-
-    # add genres to list
-    for url, name, img in match:
-        if mode == MOVIE_GENRES:
-            if getaddon_setting('Service') == "1":
-                url = "http://www.amazon.co.uk" + url 
-            add_dir(name, url, MOVIES, img)   
-        else:
-            add_dir(name, url, SERIES, img)            
-
-    change_view()
-
-
-
 def show_movies(page):
     global VIDEOS
     
@@ -326,8 +290,6 @@ if mode == EPISODES:
     show_episodes(url)
 if mode == SEARCH:
     show_search()
-if mode == MOVIE_GENRES or mode == TV_SERIES_GENRES:
-    show_genres(mode)
         
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

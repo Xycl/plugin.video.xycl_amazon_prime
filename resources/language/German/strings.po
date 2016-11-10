@@ -21,21 +21,13 @@ msgctxt "#30000"
 msgid "Amazon Prime Instant Video"
 msgstr "Amazon Prime Instant Video"
 
-msgctxt "#30001"
-msgid "Movie Genres"
-msgstr "Filmgenres"
-
 msgctxt "#30002"
-msgid "Popular Movies"
-msgstr "Beliebteste Filme"
-
-msgctxt "#30003"
-msgid "TV Genres"
-msgstr "Seriengenres"
+msgid "Movies"
+msgstr "Filme"
 
 msgctxt "#30004"
-msgid "Popular TV Shows"
-msgstr "Beliebteste Serien"
+msgid "TV Shows"
+msgstr "Serien"
 
 msgctxt "#30005"
 msgid "Search"

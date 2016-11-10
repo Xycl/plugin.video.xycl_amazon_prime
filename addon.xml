@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.xycl_amazon_prime" name="Amazon Prime" version="15.0.0" provider-name="xycl">
+<addon id="plugin.video.xycl_amazon_prime" name="Amazon Prime" version="15.1.0" provider-name="xycl">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.program.chrome.launcher" version="1.0.0"/>
@@ -12,7 +12,7 @@
         <language>en de</language>
         <summary lang="de">Amazon Prime Instant Video</summary>
         <summary lang="en">Amazon Prime Instant Video</summary>
-        <description lang="de">Spielt die Filme von Amazon Prime Instant Video ab. Sie benötigen eine Amazon Prime Mitgliedschaft!</description>
-        <description lang="en">Plays movies from Amazon Prime Instant Video. You need an Amazon Prime membership!</description>
+        <description lang="de">Spielt die Filme von Amazon Prime Instant Video ab.[CR]Sie benötigen eine Amazon Prime Mitgliedschaft und einen installierten Chrome Browser![CR]Das Chrome Launcher Addon wird ebenfalls benötigt. Zu finden unter der URL: https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/addonscriptorde-beta-repo/repository.addonscriptorde-beta.zip</description>
+        <description lang="en">Plays movies from Amazon Prime Instant Video.[CR]You need an Amazon Prime membership and an installed Chrome browser and the chrome launcher addon![CR]Chrome Launcher URL: https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/addonscriptorde-beta-repo/repository.addonscriptorde-beta.zip</description>
     </extension>
 </addon>
