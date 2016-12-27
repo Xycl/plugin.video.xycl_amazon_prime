@@ -1,3 +1,6 @@
+2016/12/27 --> v 15.2.0
+Fix:    Regular expression changed
+
 2016/09/05 --> v 15.1.0
 Fix:    Due to removed TV show and movie genres on Amazon the menus are removed, too.
 Update: Hint to install Chrome and Chrome Launcher.
