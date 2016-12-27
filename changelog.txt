@@ -1,4 +1,7 @@
-2016/12/27 --> v 15.2.0
+2016/12/27 --> v 15.2.1
+Fix:    Regular expression changed for search menu
+
+2016/12/27 --> v 15.2.0 
 Fix:    Regular expression changed
 
 2016/09/05 --> v 15.1.0

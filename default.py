@@ -148,7 +148,9 @@ def show_search():
         link=response.read()
         response.close()
 
-        match=re.compile('<li id="result_[^"]*?".*?<img alt="(Produkt-Information|Product Details)" src="([^"]*?)".*?<a class="[^"]*?s-access-detail-page[^"]*?" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
+        #match=re.compile('<li id="result_[^"]*?".*?<img alt="(Produkt-Information|Product Details)" src="([^"]*?)".*?<a class="[^"]*?s-access-detail-page[^"]*?" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
+        match=re.compile('<li id="result_[^"]*?".*?<img alt="([^"]*?)" src="([^"]*?)".*?<a class="[^"]*?s-access-detail-page[^"]*?" title="([^"]*?)" href="([^"]*?)"', re.DOTALL).findall(link)
+            
         # add movies to list
         for _, img, name,url in match:
             add_dir(name, url, VIDEOS, img)            
